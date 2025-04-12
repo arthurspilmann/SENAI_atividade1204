@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Empréstimos</h2>
+
+<!-- Mensagens de feedback -->
+{% if messages %}
+  <div class="container mt-3">
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+<!-- Formulário de empréstimo -->
+<form method="post" class="mt-4">
+  {% csrf_token %}
+  <div class="mb-3">
+    {{ form.colaborador.label_tag }} {{ form.colaborador }}
+  </div>
+  <div class="mb-3">
+    {{ form.epi.label_tag }} {{ form.epi }}
+  </div>
+  <div class="mb-3">
+    {{ form.data_emprestimo.label_tag }} {{ form.data_emprestimo }}
+  </div>
+  <button type="submit" class="btn btn-primary">Registrar Empréstimo</button>
+</form>
+
+<!-- Lista de empréstimos -->
+<h3 class="mt-5 text-center">Histórico de Empréstimos</h3>
+<ul class="list-group mt-3">
+  {% for e in emprestimos %}
+    <li class="list-group-item">
+      {{ e.colaborador }} recebeu <strong>{{ e.epi }}</strong> em {{ e.data_emprestimo|date:"d/m/Y" }}
+    </li>
+  {% empty %}
+    <li class="list-group-item text-muted">Nenhum empréstimo registrado ainda.</li>
+  {% endfor %}
+</ul>
+{% endblock %}

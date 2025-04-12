@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+  <h2 class="text-center mb-4">Relatório de Empréstimos</h2>
+
+  <!-- Formulário para filtrar por nome do colaborador -->
+  <form method="post" class="mb-4">
+    {% csrf_token %}
+    <div class="row">
+      <div class="col-md-10">
+        <label for="id_nome_colaborador" class="form-label">Nome do colaborador</label>
+        {{ form.nome_colaborador }}
+      </div>
+      <div class="col-md-2 d-flex align-items-end">
+        <button type="submit" class="btn btn-primary w-100">Filtrar</button>
+      </div>
+    </div>
+  </form>
+
+  <!-- Tabela de resultados -->
+  <div class="table-responsive">
+    <table class="table table-bordered table-striped text-center">
+      <thead class="table-dark">
+        <tr>
+          <th>Colaborador</th>
+          <th>EPI</th>
+          <th>Data do Empréstimo</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for emp in emprestimos %}
+          <tr>
+            <td>{{ emp.colaborador }}</td>
+            <td>{{ emp.epi }}</td>
+            <td>{{ emp.data_emprestimo|date:"d/m/Y" }}</td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="3">Nenhum empréstimo encontrado.</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

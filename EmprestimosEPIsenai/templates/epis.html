@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>{% if epi_id %}Editar EPI{% else %}EPIs{% endif %}</h2>
+
+<!-- Mensagens -->
+{% if messages %}
+  <div class="container mt-3">
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+<!-- Formulário -->
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary mt-2">
+        {% if epi_id %}Atualizar{% else %}Salvar{% endif %}
+    </button>
+</form>
+
+<!-- Lista de EPIs -->
+<h3 class="mt-4 text-center">Lista de EPIs</h3>
+<ul class="list-group mt-2">
+    {% for e in epis %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            {{ e.nome }} - {{ e.codigo }} - {{ e.validade }}
+            <div class="btn-group">
+                <a href="{% url 'editar_epi' e.id %}" class="btn btn-sm btn-secondary">Editar</a>
+                <a href="{% url 'excluir_epi' e.id %}" class="btn btn-sm btn-danger"
+                   onclick="return confirm('Tem certeza que deseja excluir este EPI?');">
+                    Excluir
+                </a>
+            </div>
+        </li>
+    {% empty %}
+        <li class="list-group-item">Nenhum EPI cadastrado ainda.</li>
+    {% endfor %}
+</ul>
+{% endblock %}

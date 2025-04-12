@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>{% if colaborador_id %}Editar Colaborador{% else %}Colaboradores{% endif %}</h2>
+
+<!-- Mensagens -->
+{% if messages %}
+  <div class="container mt-3">
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Fechar"></button>
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}
+
+<!-- Formulário -->
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary mt-2">
+        {% if colaborador_id %}Atualizar{% else %}Salvar{% endif %}
+    </button>
+</form>
+
+<!-- Lista de colaboradores -->
+<h3 class="mt-4 text-center">Lista de colaboradores</h3>
+<ul class="list-group mt-2">
+    {% for c in colaboradores %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            {{ c.nome }} - {{ c.cpf }} - {{ c.setor }}
+            <div class="btn-group">
+                <a href="{% url 'editar_colaborador' c.id %}" class="btn btn-sm btn-secondary">Editar</a>
+                <a href="{% url 'excluir_colaborador' c.id %}"
+                   class="btn btn-sm btn-danger"
+                   onclick="return confirm('Tem certeza que deseja excluir este colaborador?');">
+                   Excluir
+                </a>
+            </div>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}
